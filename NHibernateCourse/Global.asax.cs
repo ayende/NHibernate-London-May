@@ -62,6 +62,7 @@ namespace NHibernateCourse
 		{
 			var cfg = new Configuration()
 				.SetProperty(NHibernate.Cfg.Environment.Hbm2ddlAuto, "update")
+				.SetProperty(NHibernate.Cfg.Environment.DefaultBatchFetchSize, "10")
 				.DataBaseIntegration(db =>
 				{
 					db.ConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=nh;Integrated Security=SSPI";

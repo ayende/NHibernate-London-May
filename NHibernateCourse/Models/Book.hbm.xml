@@ -10,6 +10,10 @@
 		<property name="ISBN"/>
 		<property name="NumberOfPages"/>
 
+		<set name="Authors" table="AuthorsBooks">
+			<key column="BookId"/>
+			<many-to-many class="Author" column="AuthorId"/>
+		</set>
 	</class>
 	
 </hibernate-mapping>

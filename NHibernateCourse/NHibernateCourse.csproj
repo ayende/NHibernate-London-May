@@ -153,6 +153,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="nhibernate-mapping.xsd">
       <SubType>Designer</SubType>
     </None>

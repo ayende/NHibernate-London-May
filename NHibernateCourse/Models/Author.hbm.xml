@@ -7,6 +7,17 @@
 			<generator class="native"/>
 		</id>
 		<property name="Name"/>
+
+		<map name="Attributes" table="AuthorAttributes">
+			<key column="AuthorId"/>
+			<index column="`Key`" type="System.String"/>
+			<element column="`Value`" type="System.String"/>
+		</map>
+
+		<bag name="Books" table="AuthorsBooks" inverse="true">
+			<key column="AuthorId"/>
+			<many-to-many class="Book" column="BookId"/>
+		</bag>
 	</class>
 	
 </hibernate-mapping>

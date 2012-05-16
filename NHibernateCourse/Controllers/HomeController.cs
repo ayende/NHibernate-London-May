@@ -12,20 +12,50 @@ namespace NHibernateCourse.Controllers
 		{
 			var id = Session.Save(new Author
 			{
-				Name = name
+				Name = name,
+				Attributes =
+				{
+					{"Great", "True"},
+					{"Nice", "Not"},
+					{"Dead", "1923"}
+				}
 			});
 			return Json(new { id });
 		}
 
+		public ActionResult Batch()
+		{
+			var book1 = Session.Load<Book>(1);
+			var book2 = Session.Load<Book>(2);
+
+			return Json(new
+			{
+				book1Authors = book1.Authors.Select(x => x.Name).ToList(),
+				book2Authors = book2.Authors.Select(x => x.Name).ToList()
+			});
+		}
+
+		public ActionResult Rate(int id, int bookId)
+		{
+			var author = Session.Get<Author>(id);
+			var book = Session.Load<Book>(bookId);
+			author.Rating[book] = 5;
+
+			return Json(author.Rating.Select(x=>x.Key +": " + x.Value).ToArray());
+		}
+
 		public ActionResult Book(int id)
 		{
-			var bookId = Session.Save(new Book
+			var author = Session.Get<Author>(id);
+			var book = new Book
 			{
-				Authors = { Session.Load<Author>(id) },
 				Title = "a",
 				ISBN = "1234",
 				NumberOfPages = 23
-			});
+			};
+			author.Books.Add(book);
+			book.Authors.Add(author);
+			var bookId = Session.Save(book);
 			return Json(new { bookId });
 		}
 
@@ -44,7 +74,7 @@ namespace NHibernateCourse.Controllers
 		{
 			var data = Session.Get<Book>(id);
 
-			return Json(data.Authors.Select(x => x.Name).ToArray());
+			return Json(data.Authors.Select(x => x == null ? null :  x.Name).ToArray());
 		}
 
 		public ActionResult BooksBy(int id)
