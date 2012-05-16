@@ -1,49 +1,65 @@
 ﻿using System.Web.Mvc;
 using NHibernate;
 using NHibernateCourse.Models;
+using NHibernate.Linq;
+using System.Linq;
 
 namespace NHibernateCourse.Controllers
 {
 	public class HomeController : NHibernateController
 	{
-		public ActionResult Create()
+		public ActionResult Author(string name)
 		{
-			var id = Session.Save(new Book
+			var id = Session.Save(new Author
 			{
-				Author = "Ayende", Title = "Foo", ISBN = "1234"
+				Name = name
 			});
-			return Json(new {id});
-		} 
+			return Json(new { id });
+		}
+
+		public ActionResult Book(int id)
+		{
+			var bookId = Session.Save(new Book
+			{
+				Authors = { Session.Load<Author>(id) },
+				Title = "a",
+				ISBN = "1234",
+				NumberOfPages = 23
+			});
+			return Json(new { bookId });
+		}
+
+		public ActionResult Plagarize(int id, int authorId)
+		{
+			var author = Session.Load<Author>(authorId);
+
+			 Session.Get<Book>(id).Authors.Add(author);
+
+			return Json(new
+			{
+			});
+		}
 
 		public ActionResult Load(int id)
 		{
-			return Json(Session.Get<Book>(id));
-		}
-	}
+			var data = Session.Get<Book>(id);
 
-	public class NHibernateController : Controller
-	{
-		public new ISession Session { get; set; }
-
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
-		{
-			Session = MvcApplication.Factory.OpenSession();
-			Session.BeginTransaction();
+			return Json(data.Authors.Select(x => x.Name).ToArray());
 		}
 
-		protected override void OnActionExecuted(ActionExecutedContext filterContext)
+		public ActionResult BooksBy(int id)
 		{
-			using(Session)
+			var author = Session.Get<Author>(id);
+
+			var books = Session.Query<Book>()
+				.Where(x => x.Authors.Any(a => a == author))
+				.ToList();
+
+			return Json(new
 			{
-				if (Session == null || filterContext.Exception != null)
-					return;
-				Session.Transaction.Commit();
-			}
-		}
-
-		protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
-		{
-			return base.Json(data, contentType, contentEncoding, JsonRequestBehavior.AllowGet);
+				author,
+				titles = books.Select(x=>x.Title).ToArray()
+			});
 		}
 	}
 }
