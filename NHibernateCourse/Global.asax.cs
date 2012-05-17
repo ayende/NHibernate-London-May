@@ -8,6 +8,7 @@ using System.Web.Routing;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using NHibernateCourse.Infrastructure;
 using Environment = System.Environment;
 
 namespace NHibernateCourse
@@ -47,9 +48,9 @@ namespace NHibernateCourse
 		{
 			get
 			{
-				if(_factory != null)
+				if (_factory != null)
 					return _factory;
-				lock(typeof(MvcApplication))
+				lock (typeof(MvcApplication))
 				{
 					if (_factory != null)
 						return _factory;
@@ -61,6 +62,7 @@ namespace NHibernateCourse
 		private static ISessionFactory CreateSessionFactory()
 		{
 			var cfg = new Configuration()
+				.SetInterceptor(new DontHurtMe())
 				.SetProperty(NHibernate.Cfg.Environment.Hbm2ddlAuto, "update")
 				.SetProperty(NHibernate.Cfg.Environment.DefaultBatchFetchSize, "10")
 				.DataBaseIntegration(db =>

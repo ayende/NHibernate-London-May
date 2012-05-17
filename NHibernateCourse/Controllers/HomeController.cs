@@ -28,9 +28,10 @@ namespace NHibernateCourse.Controllers
 			var book1 = Session.Load<Book>(1);
 			var book2 = Session.Load<Book>(2);
 
+			var authors = book1.Authors;
 			return Json(new
 			{
-				book1Authors = book1.Authors.Select(x => x.Name).ToList(),
+				book1Authors = authors.Select(x => x.Name).ToList(),
 				book2Authors = book2.Authors.Select(x => x.Name).ToList()
 			});
 		}
@@ -72,9 +73,13 @@ namespace NHibernateCourse.Controllers
 
 		public ActionResult Load(int id)
 		{
-			var data = Session.Get<Book>(id);
+			for (int i = 0; i < 40; i++)
+			{
+				Session.Get<Book>(i);
+			}
 
-			return Json(data.Authors.Select(x => x == null ? null :  x.Name).ToArray());
+			var data = Session.Get<Book>(id);
+			return Json(data.Authors.Select(x => x == null ? null : x.Name).ToArray());
 		}
 
 		public ActionResult BooksBy(int id)
