@@ -1,6 +1,6 @@
 ﻿namespace NHibernateCourse.Models
 {
-    public class Animal
+    public abstract class Animal
     {
         public virtual long Id { get; set; }
         public virtual string Name { get; set; }
@@ -14,6 +14,7 @@
 
     public class Dog : Animal
     {
+		public virtual bool Bark { get; set; }
         
     }
 

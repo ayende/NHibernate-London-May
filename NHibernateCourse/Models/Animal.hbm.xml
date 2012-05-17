@@ -2,12 +2,27 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
 									 assembly="NHibernateCourse"
 									 namespace="NHibernateCourse.Models">
-  <class name="Animal">
-    <id name="Id" column="AnimalId">
-      <generator class="identity"/>
-    </id>
-    <property name="Name"/>
-    <property name="Sex"/>    
-  </class>
+	<class name="Animal" table="Animals" abstract="true">
+		<id name="Id" column="AnimalId">
+			<generator class="identity"/>
+		</id>
+		<property name="Name"/>
+		<property name="Sex"/>
+
+		<joined-subclass name="Dog">
+			<key column="AnimalId"/>
+			<property name="Bark" type="System.Boolean" />
+
+			<joined-subclass name="Bulldog">
+				<key column="AnimalId"/>
+			</joined-subclass>
+			<joined-subclass name="GermanSheppard" >
+				<key column="AnimalId"/>
+			</joined-subclass>
+		</joined-subclass>
+		<joined-subclass name="Cat" >
+			<key column="AnimalId"/>
+		</joined-subclass>
+	</class>
 
 </hibernate-mapping>

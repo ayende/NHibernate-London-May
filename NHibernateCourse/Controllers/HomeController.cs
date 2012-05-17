@@ -129,5 +129,10 @@ namespace NHibernateCourse.Controllers
             var d = Session.Query<Cat>().ToList();
             return Json(d);
         }
+
+		public ActionResult LoadDog(long id)
+		{
+			return Json(Session.Get<Dog>(id));
+		}
     }
 }
