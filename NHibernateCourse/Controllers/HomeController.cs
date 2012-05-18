@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using NHibernate;
 using NHibernateCourse.Models;
 using NHibernate.Linq;
@@ -44,17 +45,20 @@ namespace NHibernateCourse.Controllers
             return Json(author.Rating.Select(x => x.Key + ": " + x.Value).ToArray());
         }
 
-        public ActionResult Book(int id)
+        public ActionResult Book()
         {
-            var author = Session.Get<Author>(id);
             var book = new Book
             {
                 Title = "a",
                 ISBN = "1234",
-                NumberOfPages = 23
+                NumberOfPages = 23,
+				Tags = new List<string>
+				{
+					"hello",
+					"there",
+					"good"
+				}
             };
-            author.Books.Add(book);
-            book.Authors.Add(author);
             var bookId = Session.Save(book);
             return Json(new { bookId });
         }
@@ -74,7 +78,7 @@ namespace NHibernateCourse.Controllers
         {
             var data = Session.Get<Book>(id);
 
-            return Json(data.Authors.Select(x => x == null ? null : x.Name).ToArray());
+            return Json(data);
         }
 
         public ActionResult BooksBy(int id)
@@ -94,45 +98,31 @@ namespace NHibernateCourse.Controllers
 
         public ActionResult SaveDog(string name, string sex)
         {
-            var dog = new Dog { Name = name, Sex = sex };
+        	var dog = new Animal
+        	{
+        		Name = name,
+        		Sex = sex,
+        		Properties = new GermanSheppard
+        		{
+        			Cute = true,
+					Bark = true
+        		}
+        	};
             Session.Save(dog);
             return Json(dog);
         }
 
-        public ActionResult SaveCat(string name, string sex)
-        {
-            var cat = new Cat { Name = name, Sex = sex };
-            Session.Save(cat);
-            return Json(cat);
-        }
-
-        public ActionResult FindDog(string name)
-        {
-            var dog = Session.Query<Dog>().Single(d => d.Name == name);
-            return Json(dog);
-        }
-
-        public ActionResult FindCat(string name)
-        {
-            var cat = Session.Query<Cat>().Single(c => c.Name == name);
-            return Json(cat);
-        }
-
-        public ActionResult FindAllDogs()
-        {
-            var d = Session.Query<Dog>().ToList();
-            return Json(d);
-        }
-
-        public ActionResult FindAllCats()
-        {
-            var d = Session.Query<Cat>().ToList();
-            return Json(d);
-        }
-
-		public ActionResult LoadDog(long id)
+		public ActionResult FindAllAnimals()
 		{
-			return Json(Session.Get<Dog>(id));
+			var d = Session.Query<Animal>().ToList();
+			return Json(d);
+		}
+
+		public ActionResult LoadAnimal(long id)
+		{
+			var animal = Session.Get<Animal>(id);
+			animal.Name += "*";
+			return Json(animal.Name);
 		}
     }
 }

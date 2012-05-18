@@ -2,27 +2,43 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
 									 assembly="NHibernateCourse"
 									 namespace="NHibernateCourse.Models">
-	<class name="Animal" table="Animals" abstract="true">
+	<class name="Animal" table="Animals">
 		<id name="Id" column="AnimalId">
-			<generator class="identity"/>
+			<generator class="hilo">
+				<param name="capacity">10</param>
+			</generator>
 		</id>
+		<version type="System.Int32" name="Version" access="none"/>
 		<property name="Name"/>
 		<property name="Sex"/>
+	</class>
 
-		<joined-subclass name="Dog">
-			<key column="AnimalId"/>
-			<property name="Bark" type="System.Boolean" />
+	<class name="Dog" >
+		<id name="Id" column="AnimalId">
+			<generator class="hilo"/>
+		</id>
+		<property name="Bark" type="System.Boolean"  />
 
-			<joined-subclass name="Bulldog">
-				<key column="AnimalId"/>
-			</joined-subclass>
-			<joined-subclass name="GermanSheppard" >
-				<key column="AnimalId"/>
-			</joined-subclass>
-		</joined-subclass>
-		<joined-subclass name="Cat" >
-			<key column="AnimalId"/>
-		</joined-subclass>
+	</class>
+	<class name="Bulldog">
+		<id name="Id" column="AnimalId">
+			<generator class="hilo"/>
+		</id>
+		<property name="Bite" type="System.Boolean" />
+
+	</class>
+	<class name="GermanSheppard" >
+		<id name="Id" column="AnimalId">
+			<generator class="hilo"/>
+		</id>
+		<property name="Cute" type="System.Boolean" />
+
+	</class>
+	<class name="Cat" >
+		<id name="Id" column="AnimalId">
+			<generator class="hilo"/>
+		</id>
+		<property name="Scratching" type="System.Boolean" />
 	</class>
 
 </hibernate-mapping>
