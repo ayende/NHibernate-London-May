@@ -81,11 +81,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\AuditListener.cs" />
     <Compile Include="Infrastructure\DontHurtMe.cs" />
     <Compile Include="Infrastructure\SpaceDelimitedListType.cs" />
     <Compile Include="Models\Animal.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

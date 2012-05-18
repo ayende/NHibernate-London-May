@@ -8,6 +8,7 @@ using System.Web.Routing;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using NHibernate.Event;
 using NHibernateCourse.Infrastructure;
 using Environment = System.Environment;
 
@@ -71,6 +72,9 @@ namespace NHibernateCourse
 					db.Dialect<MsSql2008Dialect>();
 				})
 				.AddAssembly(Assembly.GetExecutingAssembly());
+
+			cfg
+				.SetListener(ListenerType.PreUpdate, new AuditListener());
 
 			return cfg.BuildSessionFactory();
 		}

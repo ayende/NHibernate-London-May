@@ -2,7 +2,17 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
 									 assembly="NHibernateCourse"
 									 namespace="NHibernateCourse.Models">
-	<class name="Book">
+
+	<class name="Log">
+		<id name="Id">
+			<generator class="hilo"/>
+		</id>
+		<property name="Changes"/>
+		<property name="EntityId"/>
+		<property name="Entity"/>
+	</class>
+	
+		<class name="Book">
 		<id name="Id">
 			<generator class="native"/>
 		</id>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using NHibernate;
 using NHibernateCourse.Models;
@@ -44,7 +45,14 @@ namespace NHibernateCourse.Controllers
 
             return Json(author.Rating.Select(x => x.Key + ": " + x.Value).ToArray());
         }
+		public ActionResult Update(int id)
+		{
+			var book = Session.Get<Book>(id);
+			book.ISBN = DateTime.Now.Ticks.ToString();
+			book.NumberOfPages++;
+			return Json(book.Title);
 
+		}
         public ActionResult Book()
         {
             var book = new Book
